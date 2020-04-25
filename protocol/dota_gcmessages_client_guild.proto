@@ -1,6 +1,0 @@
-syntax = "proto2";
-package protocol;
-option go_package = ".;protocol";
-
-option optimize_for = SPEED;
-option cc_generic_services = false;
