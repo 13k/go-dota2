@@ -4,14 +4,12 @@ import (
 	"context"
 
 	"github.com/13k/go-dota2/cso"
-	gcccm "github.com/13k/go-steam-resources/protobuf/dota2"
-	gcm "github.com/13k/go-steam-resources/protobuf/dota2"
-	gcmm "github.com/13k/go-steam-resources/protobuf/dota2"
+	pb "github.com/13k/go-steam-resources/protobuf/dota2"
 )
 
 // CreateLobby attempts to create a lobby with details.
-func (d *Dota2) CreateLobby(details *gcccm.CMsgPracticeLobbySetDetails) {
-	d.write(uint32(gcm.EDOTAGCMsg_k_EMsgGCPracticeLobbyCreate), &gcccm.CMsgPracticeLobbyCreate{
+func (d *Dota2) CreateLobby(details *pb.CMsgPracticeLobbySetDetails) {
+	d.write(uint32(pb.EDOTAGCMsg_k_EMsgGCPracticeLobbyCreate), &pb.CMsgPracticeLobbyCreate{
 		PassKey:      details.PassKey,
 		LobbyDetails: details,
 	})
@@ -20,7 +18,7 @@ func (d *Dota2) CreateLobby(details *gcccm.CMsgPracticeLobbySetDetails) {
 // LeaveCreateLobby attempts to leave any current lobby and creates a new one.
 func (d *Dota2) LeaveCreateLobby(
 	ctx context.Context,
-	details *gcccm.CMsgPracticeLobbySetDetails,
+	details *pb.CMsgPracticeLobbySetDetails,
 	destroyOldLobby bool,
 ) error {
 	cacheCtr, err := d.cache.GetContainerForTypeID(uint32(cso.Lobby))
@@ -38,7 +36,7 @@ func (d *Dota2) LeaveCreateLobby(
 	for {
 		lobbyObj := cacheCtr.GetOne()
 		if lobbyObj != nil {
-			lob := lobbyObj.(*gcmm.CSODOTALobby)
+			lob := lobbyObj.(*pb.CSODOTALobby)
 			le := d.le.WithField("lobby-id", lob.GetLobbyId())
 			if wasInNoLobby {
 				le.Debug("successfully created lobby")
@@ -53,7 +51,7 @@ func (d *Dota2) LeaveCreateLobby(
 				}
 				le.WithField("result", resp.GetResult().String()).Debug("destroy lobby result")
 			}
-			if lob.GetState() != gcmm.CSODOTALobby_UI {
+			if lob.GetState() != pb.CSODOTALobby_UI {
 				d.AbandonLobby()
 			}
 			d.LeaveLobby()

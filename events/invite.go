@@ -2,17 +2,18 @@ package events
 
 import (
 	"google.golang.org/protobuf/proto"
-	bgcm "github.com/13k/go-steam-resources/protobuf/dota2"
+
+	pb "github.com/13k/go-steam-resources/protobuf/dota2"
 )
 
 // InvitationCreated confirms that an invitation has been created.
 type InvitationCreated struct {
-	bgcm.CMsgInvitationCreated
+	pb.CMsgInvitationCreated
 }
 
 // GetDotaEventMsgID returns the dota message ID of the event.
-func (e *InvitationCreated) GetDotaEventMsgID() bgcm.EDOTAGCMsg {
-	return bgcm.EDOTAGCMsg(bgcm.EGCBaseMsg_k_EMsgGCInvitationCreated)
+func (e *InvitationCreated) GetDotaEventMsgID() pb.EDOTAGCMsg {
+	return pb.EDOTAGCMsg(pb.EGCBaseMsg_k_EMsgGCInvitationCreated)
 }
 
 // GetEventBody returns the event body.

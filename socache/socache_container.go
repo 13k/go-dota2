@@ -8,9 +8,9 @@ import (
 	"github.com/sirupsen/logrus"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
-	gcsdkm "github.com/13k/go-steam-resources/protobuf/dota2"
 
 	"github.com/13k/go-dota2/cso"
+	pb "github.com/13k/go-steam-resources/protobuf/dota2"
 )
 
 // SOCacheContainer contains a type of object in the cache.
@@ -37,7 +37,7 @@ func (c *SOCacheContainer) GetTypeID() uint32 {
 }
 
 // parseObject parses an object.
-func (c *SOCacheContainer) parseObject(obj *gcsdkm.CMsgSOCacheSubscribed_SubscribedType) (proto.Message, error) {
+func (c *SOCacheContainer) parseObject(obj *pb.CMsgSOCacheSubscribed_SubscribedType) (proto.Message, error) {
 	objData := obj.GetObjectData()[0]
 
 	so, err := cso.NewSharedObject(cso.CSOType(c.GetTypeID()))
@@ -85,8 +85,8 @@ func (c *SOCacheContainer) emitEvent(event *CacheEvent) {
 
 // addUpdateObject handles an added / updated object.
 func (c *SOCacheContainer) addUpdateObject(
-	soid *gcsdkm.CMsgSOIDOwner,
-	obj *gcsdkm.CMsgSOCacheSubscribed_SubscribedType,
+	soid *pb.CMsgSOIDOwner,
+	obj *pb.CMsgSOCacheSubscribed_SubscribedType,
 ) error {
 	soID := soid.GetId()
 	if soID == 0 {
@@ -116,7 +116,7 @@ func (c *SOCacheContainer) addUpdateObject(
 }
 
 // removeObject attempts to remove an object.
-func (c *SOCacheContainer) removeObject(soid *gcsdkm.CMsgSOIDOwner) error {
+func (c *SOCacheContainer) removeObject(soid *pb.CMsgSOIDOwner) error {
 	soID := soid.GetId()
 	if soID == 0 {
 		return errors.New("object has empty shared object id")
@@ -138,8 +138,8 @@ func (c *SOCacheContainer) removeObject(soid *gcsdkm.CMsgSOIDOwner) error {
 
 // HandleSubscribed handles an incoming object from a Subscribed event.
 func (c *SOCacheContainer) HandleSubscribed(
-	msg *gcsdkm.CMsgSOCacheSubscribed,
-	obj *gcsdkm.CMsgSOCacheSubscribed_SubscribedType,
+	msg *pb.CMsgSOCacheSubscribed,
+	obj *pb.CMsgSOCacheSubscribed_SubscribedType,
 ) error {
 	if len(obj.GetObjectData()) == 0 {
 		return errors.Errorf("expected object data for cache type %d", c.GetTypeID())
@@ -149,12 +149,12 @@ func (c *SOCacheContainer) HandleSubscribed(
 }
 
 // HandleUnsubscribed handles a cache unsubscribe packet.
-func (c *SOCacheContainer) HandleUnsubscribed(msg *gcsdkm.CMsgSOCacheUnsubscribed) error {
+func (c *SOCacheContainer) HandleUnsubscribed(msg *pb.CMsgSOCacheUnsubscribed) error {
 	return c.removeObject(msg.GetOwnerSoid())
 }
 
 // HandleDestroy handles a cache object destroy packet.
-func (c *SOCacheContainer) HandleDestroy(msg *gcsdkm.CMsgSOSingleObject) error {
+func (c *SOCacheContainer) HandleDestroy(msg *pb.CMsgSOSingleObject) error {
 	return c.removeObject(msg.GetOwnerSoid())
 }
 

@@ -5,7 +5,8 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
-	gcsdkm "github.com/13k/go-steam-resources/protobuf/dota2"
+
+	pb "github.com/13k/go-steam-resources/protobuf/dota2"
 )
 
 // SOCache implements the shared-object cache from DOTA.
@@ -38,7 +39,7 @@ func (c *SOCache) GetContainerForTypeID(id uint32) (*SOCacheContainer, error) {
 }
 
 // HandleSubscribed handles a subscribed message.
-func (c *SOCache) HandleSubscribed(msg *gcsdkm.CMsgSOCacheSubscribed) error {
+func (c *SOCache) HandleSubscribed(msg *pb.CMsgSOCacheSubscribed) error {
 	var retErr error
 	for _, obj := range msg.GetObjects() {
 		if obj.GetTypeId() == 0 {
@@ -59,7 +60,7 @@ func (c *SOCache) HandleSubscribed(msg *gcsdkm.CMsgSOCacheSubscribed) error {
 }
 
 // HandleUnsubscribed handles a subscribed message.
-func (c *SOCache) HandleUnsubscribed(msg *gcsdkm.CMsgSOCacheUnsubscribed) error {
+func (c *SOCache) HandleUnsubscribed(msg *pb.CMsgSOCacheUnsubscribed) error {
 	if msg.GetOwnerSoid().GetId() == 0 {
 		return errors.Errorf("object id was empty in unsubscribed")
 	}
@@ -80,14 +81,14 @@ func (c *SOCache) HandleUnsubscribed(msg *gcsdkm.CMsgSOCacheUnsubscribed) error 
 }
 
 // HandleUpdateMultiple handles a update multiple message.
-func (c *SOCache) HandleUpdateMultiple(msg *gcsdkm.CMsgSOMultipleObjects) error {
-	addUpdateObj := func(obj *gcsdkm.CMsgSOMultipleObjects_SingleObject) error {
+func (c *SOCache) HandleUpdateMultiple(msg *pb.CMsgSOMultipleObjects) error {
+	addUpdateObj := func(obj *pb.CMsgSOMultipleObjects_SingleObject) error {
 		ctr, err := c.GetContainerForTypeID(uint32(obj.GetTypeId()))
 		if err != nil {
 			return nil
 		}
 
-		m := &gcsdkm.CMsgSOCacheSubscribed_SubscribedType{
+		m := &pb.CMsgSOCacheSubscribed_SubscribedType{
 			TypeId:     obj.TypeId,
 			ObjectData: [][]byte{obj.ObjectData},
 		}
@@ -126,7 +127,7 @@ func (c *SOCache) HandleUpdateMultiple(msg *gcsdkm.CMsgSOMultipleObjects) error 
 }
 
 // HandleDestroy handles a object destroy message.
-func (c *SOCache) HandleDestroy(msg *gcsdkm.CMsgSOSingleObject) error {
+func (c *SOCache) HandleDestroy(msg *pb.CMsgSOSingleObject) error {
 	ctr, err := c.GetContainerForTypeID(uint32(msg.GetTypeId()))
 	if err != nil {
 		return err

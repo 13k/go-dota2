@@ -5,18 +5,15 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/13k/go-steam"
-	bgcm "github.com/13k/go-steam-resources/protobuf/dota2"
-	gcm "github.com/13k/go-steam-resources/protobuf/dota2"
-	gcsdkm "github.com/13k/go-steam-resources/protobuf/dota2"
-	gcsm "github.com/13k/go-steam-resources/protobuf/dota2"
-	"github.com/13k/go-steam/protocol/gc"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/protobuf/proto"
 
-	devents "github.com/13k/go-dota2/events"
+	"github.com/13k/go-dota2/events"
 	"github.com/13k/go-dota2/socache"
 	"github.com/13k/go-dota2/state"
+	"github.com/13k/go-steam"
+	pb "github.com/13k/go-steam-resources/protobuf/dota2"
+	"github.com/13k/go-steam/protocol/gc"
 )
 
 // AppID is the ID for dota2
@@ -57,7 +54,7 @@ func New(client *steam.Client, le logrus.FieldLogger) *Dota2 {
 		pendReq: make(map[uint32]map[uint32]responseHandler),
 
 		state: state.Dota2State{
-			ConnectionStatus: gcsdkm.GCConnectionStatus_GCConnectionStatus_NO_SESSION,
+			ConnectionStatus: pb.GCConnectionStatus_GCConnectionStatus_NO_SESSION,
 		},
 	}
 	c.buildHandlerMap()
@@ -83,29 +80,29 @@ func (d *Dota2) Close() {
 func (d *Dota2) buildHandlerMap() {
 	d.handlers = handlerMap{
 		// Welcome and conn status
-		uint32(gcsm.EGCBaseClientMsg_k_EMsgGCClientWelcome):          d.handleClientWelcome,
-		uint32(gcsm.EGCBaseClientMsg_k_EMsgGCClientConnectionStatus): d.handleConnectionStatus,
+		uint32(pb.EGCBaseClientMsg_k_EMsgGCClientWelcome):          d.handleClientWelcome,
+		uint32(pb.EGCBaseClientMsg_k_EMsgGCClientConnectionStatus): d.handleConnectionStatus,
 
 		// Caching
-		uint32(gcsm.ESOMsg_k_ESOMsg_CacheSubscribed):   d.handleCacheSubscribed,
-		uint32(gcsm.ESOMsg_k_ESOMsg_UpdateMultiple):    d.handleCacheUpdateMultiple,
-		uint32(gcsm.ESOMsg_k_ESOMsg_CacheUnsubscribed): d.handleCacheUnsubscribed,
-		uint32(gcsm.ESOMsg_k_ESOMsg_Destroy):           d.handleCacheDestroy,
+		uint32(pb.ESOMsg_k_ESOMsg_CacheSubscribed):   d.handleCacheSubscribed,
+		uint32(pb.ESOMsg_k_ESOMsg_UpdateMultiple):    d.handleCacheUpdateMultiple,
+		uint32(pb.ESOMsg_k_ESOMsg_CacheUnsubscribed): d.handleCacheUnsubscribed,
+		uint32(pb.ESOMsg_k_ESOMsg_Destroy):           d.handleCacheDestroy,
 
 		// System events
-		uint32(gcsm.EGCBaseClientMsg_k_EMsgGCPingRequest): d.handlePingRequest,
+		uint32(pb.EGCBaseClientMsg_k_EMsgGCPingRequest): d.handlePingRequest,
 
 		// Chat events
-		uint32(gcm.EDOTAGCMsg_k_EMsgGCChatMessage): d.getEventEmitter(func() devents.Event {
-			return &devents.ChatMessage{}
+		uint32(pb.EDOTAGCMsg_k_EMsgGCChatMessage): d.getEventEmitter(func() events.Event {
+			return &events.ChatMessage{}
 		}),
-		uint32(gcm.EDOTAGCMsg_k_EMsgGCJoinChatChannelResponse): d.getEventEmitter(func() devents.Event {
-			return &devents.JoinedChatChannel{}
+		uint32(pb.EDOTAGCMsg_k_EMsgGCJoinChatChannelResponse): d.getEventEmitter(func() events.Event {
+			return &events.JoinedChatChannel{}
 		}),
 
 		// Invites
-		uint32(bgcm.EGCBaseMsg_k_EMsgGCInvitationCreated): d.getEventEmitter(func() devents.Event {
-			return &devents.InvitationCreated{}
+		uint32(pb.EGCBaseMsg_k_EMsgGCInvitationCreated): d.getEventEmitter(func() events.Event {
+			return &events.InvitationCreated{}
 		}),
 	}
 
@@ -134,7 +131,7 @@ func (d *Dota2) accessState(cb func(nextState *state.Dota2State) (bool, error)) 
 		return err
 	}
 	if changed {
-		d.emit(devents.ClientStateChanged{
+		d.emit(events.ClientStateChanged{
 			OldState: lastState,
 			NewState: d.state,
 		})
@@ -171,7 +168,7 @@ func (d *Dota2) HandleGCPacket(packet *gc.Packet) {
 	respHandled := d.handleResponsePacket(packet)
 	if !ok && !respHandled {
 		le.Debug("unhandled gc packet")
-		d.emit(&devents.UnhandledGCPacket{
+		d.emit(&events.UnhandledGCPacket{
 			Packet: packet,
 		})
 	}
@@ -179,12 +176,12 @@ func (d *Dota2) HandleGCPacket(packet *gc.Packet) {
 
 // handlePingRequest handles an incoming ping request from the gc.
 func (d *Dota2) handlePingRequest(_ *gc.Packet) error {
-	d.write(uint32(gcsm.EGCBaseClientMsg_k_EMsgGCPingResponse), &gcsdkm.CMsgGCClientPing{})
+	d.write(uint32(pb.EGCBaseClientMsg_k_EMsgGCPingResponse), &pb.CMsgGCClientPing{})
 	return nil
 }
 
 // getEventEmitter returns a handler that emits an event, used by the generated code.
-func (d *Dota2) getEventEmitter(ctor func() devents.Event) func(packet *gc.Packet) error {
+func (d *Dota2) getEventEmitter(ctor func() events.Event) func(packet *gc.Packet) error {
 	return func(packet *gc.Packet) error {
 		obj := ctor()
 		if err := d.unmarshalBody(packet, obj.GetEventBody()); err != nil {

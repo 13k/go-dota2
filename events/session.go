@@ -1,24 +1,24 @@
 package events
 
 import (
+	pb "github.com/13k/go-steam-resources/protobuf/dota2"
 	"github.com/13k/go-steam/protocol/gc"
-	gcsdkm "github.com/13k/go-steam-resources/protobuf/dota2"
 )
 
 // GCConnectionStatusChanged is emitted when the client connection state is updated.
 type GCConnectionStatusChanged struct {
 	// OldState contains the old connection status.
-	OldState gcsdkm.GCConnectionStatus
+	OldState pb.GCConnectionStatus
 	// NewState contains the new connection status.
-	NewState gcsdkm.GCConnectionStatus
+	NewState pb.GCConnectionStatus
 	// Update contains the message from the server that triggered this change, may be nil.
-	Update *gcsdkm.CMsgConnectionStatus
+	Update *pb.CMsgConnectionStatus
 }
 
 // ClientWelcomed is emitted when the client receives the GC welcome
 type ClientWelcomed struct {
 	// Welcome is the welcome message from the GC.
-	Welcome *gcsdkm.CMsgClientWelcome
+	Welcome *pb.CMsgClientWelcome
 }
 
 // UnhandledGCPacket is called when the client ignores an unhandled packet.

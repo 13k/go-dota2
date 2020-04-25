@@ -4,10 +4,7 @@ import (
 	"github.com/pkg/errors"
 	"google.golang.org/protobuf/proto"
 
-	bgcm "github.com/13k/go-steam-resources/protobuf/dota2"
-	gcclm "github.com/13k/go-steam-resources/protobuf/dota2"
-	gccm "github.com/13k/go-steam-resources/protobuf/dota2"
-	gcmm "github.com/13k/go-steam-resources/protobuf/dota2"
+	pb "github.com/13k/go-steam-resources/protobuf/dota2"
 )
 
 // CSOType is a shared object type identifier.
@@ -56,37 +53,37 @@ const (
 // csoTypeCtors links type IDs to constructors.
 var csoTypeCtors = map[CSOType]func() proto.Message{
 	EconItem: func() proto.Message {
-		return &bgcm.CSOEconItem{}
+		return &pb.CSOEconItem{}
 	},
 	GameAccountClient: func() proto.Message {
-		return &gccm.CSODOTAGameAccountClient{}
+		return &pb.CSODOTAGameAccountClient{}
 	},
 	Party: func() proto.Message {
-		return &gcmm.CSODOTAParty{}
+		return &pb.CSODOTAParty{}
 	},
 	Lobby: func() proto.Message {
-		return &gcmm.CSODOTALobby{}
+		return &pb.CSODOTALobby{}
 	},
 	PartyInvite: func() proto.Message {
-		return &gcmm.CSODOTAPartyInvite{}
+		return &pb.CSODOTAPartyInvite{}
 	},
 	GameHeroFavorites: func() proto.Message {
-		return &gcclm.CSODOTAGameHeroFavorites{}
+		return &pb.CSODOTAGameHeroFavorites{}
 	},
 	MapLocationState: func() proto.Message {
-		return &gccm.CSODOTAMapLocationState{}
+		return &pb.CSODOTAMapLocationState{}
 	},
 	PlayerChallenge: func() proto.Message {
-		return &gccm.CSODOTAPlayerChallenge{}
+		return &pb.CSODOTAPlayerChallenge{}
 	},
 	LobbyInvite: func() proto.Message {
-		return &gcmm.CSODOTALobbyInvite{}
+		return &pb.CSODOTALobbyInvite{}
 	},
 	LeagueViewPass: func() proto.Message {
-		return &bgcm.CSOEconItemLeagueViewPass{}
+		return &pb.CSOEconItemLeagueViewPass{}
 	},
 	DropRateBonus: func() proto.Message {
-		return &bgcm.CSOEconItemDropRateBonus{}
+		return &pb.CSOEconItemDropRateBonus{}
 	},
 }
 

@@ -4,10 +4,10 @@ import (
 	"context"
 	"sync"
 
-	"github.com/13k/go-steam/protocol/gc"
 	"google.golang.org/protobuf/proto"
 
-	gcm "github.com/13k/go-steam-resources/protobuf/dota2"
+	pb "github.com/13k/go-steam-resources/protobuf/dota2"
+	"github.com/13k/go-steam/protocol/gc"
 )
 
 // responseHandler returns handled, and any error
@@ -22,7 +22,7 @@ func (d *Dota2) MakeRequest(
 	response proto.Message,
 	matchesRequest ...func(proto.Message) bool,
 ) (mrErr error) {
-	d.le.Debugf("making request: %s", gcm.EDOTAGCMsg(reqMsgID).String())
+	d.le.Debugf("making request: %s", pb.EDOTAGCMsg(reqMsgID).String())
 	cctx, err := d.validateConnectionContext()
 	if err != nil {
 		return err

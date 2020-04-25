@@ -3,12 +3,10 @@ package dota2
 import (
 	"context"
 
-	"github.com/13k/go-steam/protocol/gc"
-
-	devents "github.com/13k/go-dota2/events"
-	gcsdkm "github.com/13k/go-steam-resources/protobuf/dota2"
-	gcsm "github.com/13k/go-steam-resources/protobuf/dota2"
+	"github.com/13k/go-dota2/events"
 	"github.com/13k/go-dota2/state"
+	pb "github.com/13k/go-steam-resources/protobuf/dota2"
+	"github.com/13k/go-steam/protocol/gc"
 )
 
 // SetPlaying informs Steam we are playing / not playing Dota 2.
@@ -25,12 +23,12 @@ func (d *Dota2) SetPlaying(playing bool) {
 }
 
 // SayHello says hello to the Dota2 server, in an attempt to get a session.
-func (d *Dota2) SayHello(haveCacheVersions ...*gcsdkm.CMsgSOCacheHaveVersion) {
+func (d *Dota2) SayHello(haveCacheVersions ...*pb.CMsgSOCacheHaveVersion) {
 	d.le.Debug("sending hello to GC")
-	partnerAccType := gcsdkm.PartnerAccountType_PARTNER_NONE
-	engine := gcsdkm.ESourceEngine_k_ESE_Source2
+	partnerAccType := pb.PartnerAccountType_PARTNER_NONE
+	engine := pb.ESourceEngine_k_ESE_Source2
 	var clientSessionNeed uint32 = 104
-	d.write(uint32(gcsm.EGCBaseClientMsg_k_EMsgGCClientHello), &gcsdkm.CMsgClientHello{
+	d.write(uint32(pb.EGCBaseClientMsg_k_EMsgGCClientHello), &pb.CMsgClientHello{
 		ClientLauncher:      &partnerAccType,
 		Engine:              &engine,
 		ClientSessionNeed:   &clientSessionNeed,
@@ -58,7 +56,7 @@ func (d *Dota2) validateConnectionContext() (context.Context, error) {
 
 // handleClientWelcome handles an incoming client welcome event.
 func (d *Dota2) handleClientWelcome(packet *gc.Packet) error {
-	welcome := &gcsdkm.CMsgClientWelcome{}
+	welcome := &pb.CMsgClientWelcome{}
 	if err := d.unmarshalBody(packet, welcome); err != nil {
 		return err
 	}
@@ -74,14 +72,14 @@ func (d *Dota2) handleClientWelcome(packet *gc.Packet) error {
 		}
 	}
 
-	d.setConnectionStatus(gcsdkm.GCConnectionStatus_GCConnectionStatus_HAVE_SESSION, nil)
-	d.emit(&devents.ClientWelcomed{Welcome: welcome})
+	d.setConnectionStatus(pb.GCConnectionStatus_GCConnectionStatus_HAVE_SESSION, nil)
+	d.emit(&events.ClientWelcomed{Welcome: welcome})
 	return nil
 }
 
 // handleConnectionStatus handles the connection status update event.
 func (d *Dota2) handleConnectionStatus(packet *gc.Packet) error {
-	stat := &gcsdkm.CMsgConnectionStatus{}
+	stat := &pb.CMsgConnectionStatus{}
 	if err := d.unmarshalBody(packet, stat); err != nil {
 		return err
 	}
@@ -97,8 +95,8 @@ func (d *Dota2) handleConnectionStatus(packet *gc.Packet) error {
 // setConnectionStatus sets the connection status, and emits an event.
 // NOTE: do not call from inside accessState.
 func (d *Dota2) setConnectionStatus(
-	connStatus gcsdkm.GCConnectionStatus,
-	update *gcsdkm.CMsgConnectionStatus,
+	connStatus pb.GCConnectionStatus,
+	update *pb.CMsgConnectionStatus,
 ) {
 	_ = d.accessState(func(ns *state.Dota2State) (changed bool, err error) {
 		if ns.ConnectionStatus == connStatus {
@@ -109,7 +107,7 @@ func (d *Dota2) setConnectionStatus(
 		d.le.WithField("old", oldState.String()).
 			WithField("new", connStatus.String()).
 			Debug("connection status changed")
-		d.emit(&devents.GCConnectionStatusChanged{
+		d.emit(&events.GCConnectionStatusChanged{
 			OldState: oldState,
 			NewState: connStatus,
 			Update:   update,
@@ -123,7 +121,7 @@ func (d *Dota2) setConnectionStatus(
 			d.connectionCtxCancel = nil
 			d.connectionCtx = nil
 		}
-		if connStatus == gcsdkm.GCConnectionStatus_GCConnectionStatus_HAVE_SESSION {
+		if connStatus == pb.GCConnectionStatus_GCConnectionStatus_HAVE_SESSION {
 			d.connectionCtx, d.connectionCtxCancel = context.WithCancel(context.Background())
 		}
 		d.connectionCtxMtx.Unlock()

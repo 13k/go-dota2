@@ -1,22 +1,20 @@
 package dota2
 
 import (
+	pb "github.com/13k/go-steam-resources/protobuf/dota2"
 	"github.com/13k/go-steam/protocol/gc"
-
-	gcsdkm "github.com/13k/go-steam-resources/protobuf/dota2"
-	gcsm "github.com/13k/go-steam-resources/protobuf/dota2"
 )
 
 // RequestCacheSubscriptionRefresh requests a subscription refresh for a specific cache ID.
-func (d *Dota2) RequestCacheSubscriptionRefresh(ownerSoid *gcsdkm.CMsgSOIDOwner) {
-	d.write(uint32(gcsm.ESOMsg_k_ESOMsg_CacheSubscriptionRefresh), &gcsdkm.CMsgSOCacheSubscriptionRefresh{
+func (d *Dota2) RequestCacheSubscriptionRefresh(ownerSoid *pb.CMsgSOIDOwner) {
+	d.write(uint32(pb.ESOMsg_k_ESOMsg_CacheSubscriptionRefresh), &pb.CMsgSOCacheSubscriptionRefresh{
 		OwnerSoid: ownerSoid,
 	})
 }
 
 // handleCacheSubscribed handles a CacheSubscribed packet.
 func (d *Dota2) handleCacheSubscribed(packet *gc.Packet) error {
-	sub := &gcsdkm.CMsgSOCacheSubscribed{}
+	sub := &pb.CMsgSOCacheSubscribed{}
 	if err := d.unmarshalBody(packet, sub); err != nil {
 		return err
 	}
@@ -30,7 +28,7 @@ func (d *Dota2) handleCacheSubscribed(packet *gc.Packet) error {
 
 // handleCacheUnsubscribed handles a CacheUnsubscribed packet.
 func (d *Dota2) handleCacheUnsubscribed(packet *gc.Packet) error {
-	sub := &gcsdkm.CMsgSOCacheUnsubscribed{}
+	sub := &pb.CMsgSOCacheUnsubscribed{}
 	if err := d.unmarshalBody(packet, sub); err != nil {
 		return err
 	}
@@ -44,7 +42,7 @@ func (d *Dota2) handleCacheUnsubscribed(packet *gc.Packet) error {
 
 // handleCacheUpdateMultiple handles when one or more object(s) in a cache is/are updated.
 func (d *Dota2) handleCacheUpdateMultiple(packet *gc.Packet) error {
-	sub := &gcsdkm.CMsgSOMultipleObjects{}
+	sub := &pb.CMsgSOMultipleObjects{}
 	if err := d.unmarshalBody(packet, sub); err != nil {
 		return err
 	}
@@ -58,7 +56,7 @@ func (d *Dota2) handleCacheUpdateMultiple(packet *gc.Packet) error {
 
 // handleCacheDestroy handles when an object in a cache is destroyed.
 func (d *Dota2) handleCacheDestroy(packet *gc.Packet) error {
-	sub := &gcsdkm.CMsgSOSingleObject{}
+	sub := &pb.CMsgSOSingleObject{}
 	if err := d.unmarshalBody(packet, sub); err != nil {
 		return err
 	}
