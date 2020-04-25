@@ -11,11 +11,11 @@ func init() {
 		Name:  "print-type-list",
 		Usage: "prints the protobuf type names",
 		Action: func(c *cli.Context) error {
-			packageMap, typeMap, err := BuildProtoTypeMap()
+			_, typeMap, err := BuildProtoTypeMap()
+
 			if err != nil {
 				return err
 			}
-			_ = packageMap
 
 			for typeName := range typeMap {
 				fmt.Printf("%s\n", typeName)

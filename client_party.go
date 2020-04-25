@@ -5,6 +5,6 @@ import (
 )
 
 // LeaveParty attempts to leave the current party.
-func (d *Dota2) LeaveParty() {
-	d.write(uint32(pb.EGCBaseMsg_k_EMsgGCLeaveParty), &pb.CMsgLeaveParty{})
+func (d *Dota2) LeaveParty() error {
+	return d.write(uint32(pb.EGCBaseMsg_k_EMsgGCLeaveParty), &pb.CMsgLeaveParty{})
 }

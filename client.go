@@ -110,8 +110,8 @@ func (d *Dota2) buildHandlerMap() {
 }
 
 // write sends a message to the game coordinator.
-func (d *Dota2) write(messageType uint32, msg proto.Message) {
-	d.client.GC.Write(gc.NewProtoMessage(AppID, messageType, msg))
+func (d *Dota2) write(messageType uint32, msg proto.Message) error {
+	return d.client.GC.Write(gc.NewProtoMessage(AppID, messageType, msg))
 }
 
 // emit emits an event.
@@ -176,8 +176,7 @@ func (d *Dota2) HandleGCPacket(packet *gc.Packet) {
 
 // handlePingRequest handles an incoming ping request from the gc.
 func (d *Dota2) handlePingRequest(_ *gc.Packet) error {
-	d.write(uint32(pb.EGCBaseClientMsg_k_EMsgGCPingResponse), &pb.CMsgGCClientPing{})
-	return nil
+	return d.write(uint32(pb.EGCBaseClientMsg_k_EMsgGCPingResponse), &pb.CMsgGCClientPing{})
 }
 
 // getEventEmitter returns a handler that emits an event, used by the generated code.

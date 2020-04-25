@@ -77,7 +77,9 @@ func (d *Dota2) MakeRequest(
 	}
 	d.pendReqMtx.Unlock()
 
-	d.write(reqMsgID, request)
+	if err := d.write(reqMsgID, request); err != nil {
+		return err
+	}
 
 	select {
 	case <-ctx.Done():

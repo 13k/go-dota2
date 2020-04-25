@@ -6,7 +6,6 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
-	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 
 	"github.com/13k/go-dota2/cso"
@@ -51,12 +50,6 @@ func (c *SOCacheContainer) parseObject(obj *pb.CMsgSOCacheSubscribed_SubscribedT
 	}
 
 	return so, nil
-}
-
-// stringifyObject converts an object to a json string.
-func (c *SOCacheContainer) stringifyObject(obj proto.Message) string { //nolint: unused
-	b, _ := protojson.Marshal(obj)
-	return string(b)
 }
 
 // emitEvent emits an event to all listeners.

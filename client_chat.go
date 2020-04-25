@@ -6,8 +6,8 @@ import (
 
 // SendChannelMessage attempts to send a message in a channel, text-only.
 // Use SendChatMessage for more fine-grained control.
-func (d *Dota2) SendChannelMessage(channelID uint64, message string) {
-	d.write(uint32(pb.EDOTAGCMsg_k_EMsgGCChatMessage), &pb.CMsgDOTAChatMessage{
+func (d *Dota2) SendChannelMessage(channelID uint64, message string) error {
+	return d.write(uint32(pb.EDOTAGCMsg_k_EMsgGCChatMessage), &pb.CMsgDOTAChatMessage{
 		ChannelId: &channelID,
 		Text:      &message,
 	})

@@ -6,8 +6,8 @@ import (
 )
 
 // RequestCacheSubscriptionRefresh requests a subscription refresh for a specific cache ID.
-func (d *Dota2) RequestCacheSubscriptionRefresh(ownerSoid *pb.CMsgSOIDOwner) {
-	d.write(uint32(pb.ESOMsg_k_ESOMsg_CacheSubscriptionRefresh), &pb.CMsgSOCacheSubscriptionRefresh{
+func (d *Dota2) RequestCacheSubscriptionRefresh(ownerSoid *pb.CMsgSOIDOwner) error {
+	return d.write(uint32(pb.ESOMsg_k_ESOMsg_CacheSubscriptionRefresh), &pb.CMsgSOCacheSubscriptionRefresh{
 		OwnerSoid: ownerSoid,
 	})
 }

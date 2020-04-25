@@ -8,8 +8,8 @@ import (
 )
 
 // CreateLobby attempts to create a lobby with details.
-func (d *Dota2) CreateLobby(details *pb.CMsgPracticeLobbySetDetails) {
-	d.write(uint32(pb.EDOTAGCMsg_k_EMsgGCPracticeLobbyCreate), &pb.CMsgPracticeLobbyCreate{
+func (d *Dota2) CreateLobby(details *pb.CMsgPracticeLobbySetDetails) error {
+	return d.write(uint32(pb.EDOTAGCMsg_k_EMsgGCPracticeLobbyCreate), &pb.CMsgPracticeLobbyCreate{
 		PassKey:      details.PassKey,
 		LobbyDetails: details,
 	})
@@ -58,14 +58,16 @@ func (d *Dota2) LeaveCreateLobby(
 		} else {
 			wasInNoLobby = true
 			d.le.Debug("creating lobby")
-			d.CreateLobby(details)
+
+			if err := d.CreateLobby(details); err != nil {
+				return err
+			}
 		}
 
 		select {
 		case <-ctx.Done():
 			return ctx.Err()
-		case event := <-eventCh:
-			_ = event
+		case <-eventCh:
 		}
 	}
 }
