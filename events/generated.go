@@ -3,7 +3,7 @@
 package events
 
 import (
-	"github.com/paralin/go-dota2/protocol"
+	"github.com/13k/go-dota2/protocol"
 	"google.golang.org/protobuf/proto"
 )
 

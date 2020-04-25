@@ -1,7 +1,7 @@
 package socache
 
 import (
-	"github.com/paralin/go-dota2/cso"
+	"github.com/13k/go-dota2/cso"
 	"google.golang.org/protobuf/proto"
 )
 

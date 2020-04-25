@@ -4,10 +4,10 @@ import (
 	"context"
 
 	"github.com/faceit/go-steam/protocol/gamecoordinator"
-	devents "github.com/paralin/go-dota2/events"
-	gcsdkm "github.com/paralin/go-dota2/protocol"
-	gcsm "github.com/paralin/go-dota2/protocol"
-	"github.com/paralin/go-dota2/state"
+	devents "github.com/13k/go-dota2/events"
+	gcsdkm "github.com/13k/go-dota2/protocol"
+	gcsm "github.com/13k/go-dota2/protocol"
+	"github.com/13k/go-dota2/state"
 )
 
 // SetPlaying informs Steam we are playing / not playing Dota 2.

@@ -1,7 +1,7 @@
 package events
 
 import (
-	bgcm "github.com/paralin/go-dota2/protocol"
+	bgcm "github.com/13k/go-dota2/protocol"
 	"google.golang.org/protobuf/proto"
 )
 

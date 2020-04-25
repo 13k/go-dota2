@@ -1,10 +1,10 @@
 package cso
 
 import (
-	bgcm "github.com/paralin/go-dota2/protocol"
-	gcclm "github.com/paralin/go-dota2/protocol"
-	gccm "github.com/paralin/go-dota2/protocol"
-	gcmm "github.com/paralin/go-dota2/protocol"
+	bgcm "github.com/13k/go-dota2/protocol"
+	gcclm "github.com/13k/go-dota2/protocol"
+	gccm "github.com/13k/go-dota2/protocol"
+	gcmm "github.com/13k/go-dota2/protocol"
 	"github.com/pkg/errors"
 	"google.golang.org/protobuf/proto"
 )

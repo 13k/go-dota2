@@ -2,7 +2,7 @@ package dota2
 
 import (
 	"github.com/faceit/go-steam/steamid"
-	bgcm "github.com/paralin/go-dota2/protocol"
+	bgcm "github.com/13k/go-dota2/protocol"
 )
 
 // InviteLobbyMember attempts to invite a player to the current lobby.

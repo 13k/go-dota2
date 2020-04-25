@@ -1,7 +1,7 @@
 package main
 
 import (
-	dm "github.com/paralin/go-dota2/protocol"
+	dm "github.com/13k/go-dota2/protocol"
 	"google.golang.org/protobuf/proto"
 )
 

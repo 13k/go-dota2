@@ -2,7 +2,7 @@ package dota2
 
 import (
 	"github.com/faceit/go-steam/protocol/gamecoordinator"
-	"github.com/paralin/go-dota2/events"
+	"github.com/13k/go-dota2/events"
 )
 
 // handleMatchSignedOut handles an incoming steam datagram ticket.

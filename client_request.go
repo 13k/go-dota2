@@ -7,7 +7,7 @@ import (
 	"github.com/faceit/go-steam/protocol/gamecoordinator"
 	"google.golang.org/protobuf/proto"
 
-	gcm "github.com/paralin/go-dota2/protocol"
+	gcm "github.com/13k/go-dota2/protocol"
 )
 
 // responseHandler returns handled, and any error
