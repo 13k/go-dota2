@@ -2,8 +2,7 @@ package events
 
 import (
 	"github.com/13k/go-steam/protocol/gc"
-
-	gcsdkm "github.com/13k/go-dota2/protocol"
+	gcsdkm "github.com/13k/go-steam-resources/protobuf/dota2"
 )
 
 // GCConnectionStatusChanged is emitted when the client connection state is updated.

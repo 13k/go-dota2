@@ -4,11 +4,12 @@ import (
 	"strings"
 
 	"github.com/fatih/camelcase"
-	dota_gcmessages_msgid "github.com/13k/go-dota2/protocol"
+
+	pb "github.com/13k/go-steam-resources/protobuf/dota2"
 )
 
 // GetMessageFuncName determines what function name we should assign a message.
-func GetMessageFuncName(msg dota_gcmessages_msgid.EDOTAGCMsg) string {
+func GetMessageFuncName(msg pb.EDOTAGCMsg) string {
 	if str, ok := msgMethodNameOverrides[msg]; ok {
 		return str
 	}

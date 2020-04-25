@@ -4,7 +4,8 @@ import (
 	"strings"
 
 	"github.com/fatih/camelcase"
-	"github.com/13k/go-dota2/protocol"
+
+	pb "github.com/13k/go-steam-resources/protobuf/dota2"
 )
 
 // MsgSender is the sender type of a message.
@@ -18,7 +19,7 @@ const (
 )
 
 // GetMessageSender determines which party (GC, Client, None) would send this message in a session.
-func GetMessageSender(msg protocol.EDOTAGCMsg) MsgSender {
+func GetMessageSender(msg pb.EDOTAGCMsg) MsgSender {
 	if !IsValidMsg(msg) {
 		return MsgSenderNone
 	}

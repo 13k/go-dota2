@@ -3,8 +3,8 @@ package dota2
 import (
 	"github.com/13k/go-steam/protocol/gc"
 
-	gcsdkm "github.com/13k/go-dota2/protocol"
-	gcsm "github.com/13k/go-dota2/protocol"
+	gcsdkm "github.com/13k/go-steam-resources/protobuf/dota2"
+	gcsm "github.com/13k/go-steam-resources/protobuf/dota2"
 )
 
 // RequestCacheSubscriptionRefresh requests a subscription refresh for a specific cache ID.

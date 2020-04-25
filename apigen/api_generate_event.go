@@ -3,18 +3,18 @@ package main
 import (
 	"fmt"
 
-	gcm "github.com/13k/go-dota2/protocol"
+	pb "github.com/13k/go-steam-resources/protobuf/dota2"
 )
 
 type generatedEventHandler struct {
-	msgID     gcm.EDOTAGCMsg
+	msgID     pb.EDOTAGCMsg
 	eventName string
 	eventType *ProtoType
 }
 
 // buildGeneratedEventHandler builds a generated event handler.
 func buildGeneratedEventHandler(
-	msgID gcm.EDOTAGCMsg,
+	msgID pb.EDOTAGCMsg,
 	protoMap map[string]*ProtoType,
 	eventImports map[string]struct{},
 ) (*generatedEventHandler, error) {

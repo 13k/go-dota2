@@ -6,15 +6,15 @@ import (
 	"sync"
 
 	"github.com/13k/go-steam"
+	bgcm "github.com/13k/go-steam-resources/protobuf/dota2"
+	gcm "github.com/13k/go-steam-resources/protobuf/dota2"
+	gcsdkm "github.com/13k/go-steam-resources/protobuf/dota2"
+	gcsm "github.com/13k/go-steam-resources/protobuf/dota2"
 	"github.com/13k/go-steam/protocol/gc"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/protobuf/proto"
 
 	devents "github.com/13k/go-dota2/events"
-	bgcm "github.com/13k/go-dota2/protocol"
-	gcm "github.com/13k/go-dota2/protocol"
-	gcsdkm "github.com/13k/go-dota2/protocol"
-	gcsm "github.com/13k/go-dota2/protocol"
 	"github.com/13k/go-dota2/socache"
 	"github.com/13k/go-dota2/state"
 )

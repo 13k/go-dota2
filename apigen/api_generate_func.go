@@ -6,22 +6,23 @@ import (
 	"strings"
 
 	"github.com/fatih/camelcase"
-	gcm "github.com/13k/go-dota2/protocol"
 	"github.com/pkg/errors"
+
+	pb "github.com/13k/go-steam-resources/protobuf/dota2"
 )
 
 // generatedRequestFunc is a auto-generated request.
 type generatedRequestFunc struct {
 	methodName string
 	reqType    types.Object
-	reqMsgID   gcm.EDOTAGCMsg
+	reqMsgID   pb.EDOTAGCMsg
 	respType   types.Object
-	respMsgID  gcm.EDOTAGCMsg
+	respMsgID  pb.EDOTAGCMsg
 }
 
 // buildGeneratedRequestFunc builds a generated request function.
 func buildGeneratedRequestFunc(
-	msgID gcm.EDOTAGCMsg,
+	msgID pb.EDOTAGCMsg,
 	protoMap map[string]*ProtoType,
 	clientImports map[string]struct{},
 ) (*generatedRequestFunc, error) {

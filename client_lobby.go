@@ -4,9 +4,9 @@ import (
 	"context"
 
 	"github.com/13k/go-dota2/cso"
-	gcccm "github.com/13k/go-dota2/protocol"
-	gcm "github.com/13k/go-dota2/protocol"
-	gcmm "github.com/13k/go-dota2/protocol"
+	gcccm "github.com/13k/go-steam-resources/protobuf/dota2"
+	gcm "github.com/13k/go-steam-resources/protobuf/dota2"
+	gcmm "github.com/13k/go-steam-resources/protobuf/dota2"
 )
 
 // CreateLobby attempts to create a lobby with details.

@@ -3,11 +3,11 @@ package main
 import (
 	"strings"
 
-	dota_gcmessages_msgid "github.com/13k/go-dota2/protocol"
+	pb "github.com/13k/go-steam-resources/protobuf/dota2"
 )
 
 // GetMessageEventName returns the event name for the message.
-func GetMessageEventName(msg dota_gcmessages_msgid.EDOTAGCMsg) string {
+func GetMessageEventName(msg pb.EDOTAGCMsg) string {
 	if over, ok := msgEventNameOverrides[msg]; ok {
 		return over
 	}
@@ -17,5 +17,6 @@ func GetMessageEventName(msg dota_gcmessages_msgid.EDOTAGCMsg) string {
 	msgName = strings.TrimPrefix(msgName, "GC")
 	msgName = strings.TrimPrefix(msgName, "ToClient")
 	msgName = strings.Replace(msgName, "_", "", -1)
+
 	return msgName
 }

@@ -5,8 +5,7 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
-
-	gcsdkm "github.com/13k/go-dota2/protocol"
+	gcsdkm "github.com/13k/go-steam-resources/protobuf/dota2"
 )
 
 // SOCache implements the shared-object cache from DOTA.

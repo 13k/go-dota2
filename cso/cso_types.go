@@ -1,12 +1,13 @@
 package cso
 
 import (
-	bgcm "github.com/13k/go-dota2/protocol"
-	gcclm "github.com/13k/go-dota2/protocol"
-	gccm "github.com/13k/go-dota2/protocol"
-	gcmm "github.com/13k/go-dota2/protocol"
 	"github.com/pkg/errors"
 	"google.golang.org/protobuf/proto"
+
+	bgcm "github.com/13k/go-steam-resources/protobuf/dota2"
+	gcclm "github.com/13k/go-steam-resources/protobuf/dota2"
+	gccm "github.com/13k/go-steam-resources/protobuf/dota2"
+	gcmm "github.com/13k/go-steam-resources/protobuf/dota2"
 )
 
 // CSOType is a shared object type identifier.

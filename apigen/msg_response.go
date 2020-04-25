@@ -5,13 +5,14 @@ import (
 	"reflect"
 	"strings"
 
-	gcm "github.com/13k/go-dota2/protocol"
 	"github.com/pkg/errors"
+
+	pb "github.com/13k/go-steam-resources/protobuf/dota2"
 )
 
 // GetResponseMessageID returns the response message ID for the request.
 // Error is returned if the request ID indicates there should be a response, but there is none.
-func GetResponseMessageID(reqID gcm.EDOTAGCMsg) (gcm.EDOTAGCMsg, error) {
+func GetResponseMessageID(reqID pb.EDOTAGCMsg) (pb.EDOTAGCMsg, error) {
 	if override, ok := msgResponseOverrides[reqID]; ok {
 		return override, nil
 	}
@@ -26,25 +27,25 @@ func GetResponseMessageID(reqID gcm.EDOTAGCMsg) (gcm.EDOTAGCMsg, error) {
 	clientToGC := strings.HasPrefix(msgStr, "ClientToGC")
 	msgStr = strings.TrimPrefix(msgStr, "ClientToGC")
 
-	queryRespStr := func(respStr string) (gcm.EDOTAGCMsg, bool) {
-		val, ok := gcm.EDOTAGCMsg_value["k_EMsg"+respStr]
+	queryRespStr := func(respStr string) (pb.EDOTAGCMsg, bool) {
+		val, ok := pb.EDOTAGCMsg_value["k_EMsg"+respStr]
 		if ok {
-			return gcm.EDOTAGCMsg(val), true
+			return pb.EDOTAGCMsg(val), true
 		}
 
 		if clientToGC {
-			val, ok = gcm.EDOTAGCMsg_value["k_EMsgGCToClient"+respStr]
+			val, ok = pb.EDOTAGCMsg_value["k_EMsgGCToClient"+respStr]
 			if ok {
-				return gcm.EDOTAGCMsg(val), true
+				return pb.EDOTAGCMsg(val), true
 			}
 
-			val, ok = gcm.EDOTAGCMsg_value["k_EMsgClientToGC"+respStr]
+			val, ok = pb.EDOTAGCMsg_value["k_EMsgClientToGC"+respStr]
 			if ok {
-				return gcm.EDOTAGCMsg(val), true
+				return pb.EDOTAGCMsg(val), true
 			}
 		}
 
-		return gcm.EDOTAGCMsg(0), false
+		return pb.EDOTAGCMsg(0), false
 	}
 
 	if respID, ok := queryRespStr(msgStr + "Response"); ok {
@@ -62,17 +63,17 @@ func GetResponseMessageID(reqID gcm.EDOTAGCMsg) (gcm.EDOTAGCMsg, error) {
 			}
 		}
 
-		return gcm.EDOTAGCMsg(0), errors.Errorf(
+		return pb.EDOTAGCMsg(0), errors.Errorf(
 			"response was implied by request %v but no response type found",
 			msgID.String(),
 		)
 	}
 
-	return gcm.EDOTAGCMsg(0), nil
+	return pb.EDOTAGCMsg(0), nil
 }
 
 // LookupMessageProtoType lookup proto from message ID.
-func LookupMessageProtoType(protoMap map[string]*ProtoType, msgID gcm.EDOTAGCMsg) (*ProtoType, error) {
+func LookupMessageProtoType(protoMap map[string]*ProtoType, msgID pb.EDOTAGCMsg) (*ProtoType, error) {
 	var protoName string
 	if overrideMsg, ok := msgProtoTypeOverrides[msgID]; ok {
 		protoName = reflect.TypeOf(overrideMsg).Elem().Name()

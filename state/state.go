@@ -1,8 +1,8 @@
 package state
 
 import (
-	gcmm "github.com/13k/go-dota2/protocol"
-	gcsdkm "github.com/13k/go-dota2/protocol"
+	gcmm "github.com/13k/go-steam-resources/protobuf/dota2"
+	gcsdkm "github.com/13k/go-steam-resources/protobuf/dota2"
 )
 
 // Dota2State is a snapshot of the client state at a point in time.

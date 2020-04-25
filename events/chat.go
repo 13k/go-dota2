@@ -1,18 +1,19 @@
 package events
 
 import (
-	gcmcc "github.com/13k/go-dota2/protocol"
 	"google.golang.org/protobuf/proto"
+
+	pb "github.com/13k/go-steam-resources/protobuf/dota2"
 )
 
 // ChatMessage is emitted when a chat message is observed.
 type ChatMessage struct {
-	gcmcc.CMsgDOTAChatMessage
+	pb.CMsgDOTAChatMessage
 }
 
 // GetDotaEventMsgID returns the dota message ID of the event.
-func (e *ChatMessage) GetDotaEventMsgID() gcmcc.EDOTAGCMsg {
-	return gcmcc.EDOTAGCMsg_k_EMsgGCChatMessage
+func (e *ChatMessage) GetDotaEventMsgID() pb.EDOTAGCMsg {
+	return pb.EDOTAGCMsg_k_EMsgGCChatMessage
 }
 
 // GetEventBody returns the event body.
@@ -27,12 +28,12 @@ func (e *ChatMessage) GetEventName() string {
 
 // JoinedChatChannel is emitted when we join a chat channel.
 type JoinedChatChannel struct {
-	gcmcc.CMsgDOTAJoinChatChannelResponse
+	pb.CMsgDOTAJoinChatChannelResponse
 }
 
 // GetDotaEventMsgID returns the dota message ID of the event.
-func (e *JoinedChatChannel) GetDotaEventMsgID() gcmcc.EDOTAGCMsg {
-	return gcmcc.EDOTAGCMsg_k_EMsgGCJoinChatChannelResponse
+func (e *JoinedChatChannel) GetDotaEventMsgID() pb.EDOTAGCMsg {
+	return pb.EDOTAGCMsg_k_EMsgGCJoinChatChannelResponse
 }
 
 // GetEventBody returns the event body.

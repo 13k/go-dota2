@@ -11,7 +11,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/serenize/snaker"
 
-	gcm "github.com/13k/go-dota2/protocol"
+	pb "github.com/13k/go-steam-resources/protobuf/dota2"
 )
 
 const (
@@ -20,7 +20,7 @@ const (
 
 // GenerateAPI uses protobuf reflection to generate an API client for Dota.
 func GenerateAPI(clientOutput, eventsOutput io.Writer) error {
-	senderMap := make(map[gcm.EDOTAGCMsg]MsgSender)
+	senderMap := make(map[pb.EDOTAGCMsg]MsgSender)
 
 	packageMap, protoMap, err := BuildProtoTypeMap()
 	if err != nil {
@@ -34,18 +34,18 @@ func GenerateAPI(clientOutput, eventsOutput io.Writer) error {
 	var requestFuncs []*generatedRequestFunc
 
 	eventsImports := make(map[string]struct{})
-	eventsImports["github.com/13k/go-dota2/protocol"] = struct{}{}
+	eventsImports["github.com/13k/go-steam-resources/protobuf/dota2"] = struct{}{}
 	eventsImports["google.golang.org/protobuf/proto"] = struct{}{}
 
 	clientImports := make(map[string]struct{})
 	clientImports["context"] = struct{}{}
-	clientImports["github.com/13k/go-dota2/protocol"] = struct{}{}
+	clientImports["github.com/13k/go-steam-resources/protobuf/dota2"] = struct{}{}
 	clientImports["github.com/13k/go-steam/steamid"] = struct{}{}
 	clientImports["github.com/13k/go-dota2/events"] = struct{}{}
 
 	// responseMsgs are messages that are known to be responses.
-	responseMsgs := make(map[gcm.EDOTAGCMsg]struct{})
-	eventHandlers := make(map[gcm.EDOTAGCMsg]*generatedEventHandler)
+	responseMsgs := make(map[pb.EDOTAGCMsg]struct{})
+	eventHandlers := make(map[pb.EDOTAGCMsg]*generatedEventHandler)
 	var eventHandlersOrdered []*generatedEventHandler
 
 	for _, msgID := range msgIds {
@@ -240,11 +240,11 @@ func GenerateAPI(clientOutput, eventsOutput io.Writer) error {
 				return err
 			}
 			fmt.Fprintf(clientOutput, "{}\n\n\treturn resp, d.MakeRequest(\n")
-			fmt.Fprintf(clientOutput, "\t\tctx,\n\t\tuint32(protocol.EDOTAGCMsg_%s),\n", f.reqMsgID.String())
-			fmt.Fprintf(clientOutput, "\t\treq,\n\t\tuint32(protocol.EDOTAGCMsg_%s),\n", f.respMsgID.String())
+			fmt.Fprintf(clientOutput, "\t\tctx,\n\t\tuint32(dota2.EDOTAGCMsg_%s),\n", f.reqMsgID.String())
+			fmt.Fprintf(clientOutput, "\t\treq,\n\t\tuint32(dota2.EDOTAGCMsg_%s),\n", f.respMsgID.String())
 			fmt.Fprintf(clientOutput, "\t\tresp,\n\t)\n")
 		} else {
-			fmt.Fprintf(clientOutput, "\td.write(uint32(protocol.EDOTAGCMsg_%s), req)\n", f.reqMsgID.String())
+			fmt.Fprintf(clientOutput, "\td.write(uint32(dota2.EDOTAGCMsg_%s), req)\n", f.reqMsgID.String())
 		}
 
 		fmt.Fprintf(clientOutput, "}\n")
@@ -277,8 +277,8 @@ func GenerateAPI(clientOutput, eventsOutput io.Writer) error {
 		fmt.Fprintf(eventsOutput, "\n}\n")
 
 		fmt.Fprintf(eventsOutput, "\n// GetDotaEventMsgID returns the dota message ID of the event.\n")
-		fmt.Fprintf(eventsOutput, "func (e *%s) GetDotaEventMsgID() protocol.EDOTAGCMsg {\n", eventHandler.eventName)
-		fmt.Fprintf(eventsOutput, "\treturn protocol.EDOTAGCMsg_%s\n", eventHandler.msgID.String())
+		fmt.Fprintf(eventsOutput, "func (e *%s) GetDotaEventMsgID() dota2.EDOTAGCMsg {\n", eventHandler.eventName)
+		fmt.Fprintf(eventsOutput, "\treturn dota2.EDOTAGCMsg_%s\n", eventHandler.msgID.String())
 		fmt.Fprintf(eventsOutput, "}\n")
 
 		fmt.Fprintf(eventsOutput, "\n// GetEventBody returns the event body.\n")
@@ -293,7 +293,7 @@ func GenerateAPI(clientOutput, eventsOutput io.Writer) error {
 
 		fmt.Fprintf(
 			clientOutput,
-			"\td.handlers[uint32(protocol.EDOTAGCMsg_%s)] = d.getEventEmitter(func() events.Event {\n",
+			"\td.handlers[uint32(dota2.EDOTAGCMsg_%s)] = d.getEventEmitter(func() events.Event {\n",
 			eventHandler.msgID.String(),
 		)
 		fmt.Fprintf(clientOutput, "\t\treturn &events.%s{}\n\t})\n", eventHandler.eventName)

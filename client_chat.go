@@ -1,8 +1,8 @@
 package dota2
 
 import (
-	gcm "github.com/13k/go-dota2/protocol"
-	gcmcc "github.com/13k/go-dota2/protocol"
+	gcm "github.com/13k/go-steam-resources/protobuf/dota2"
+	gcmcc "github.com/13k/go-steam-resources/protobuf/dota2"
 )
 
 // SendChannelMessage attempts to send a message in a channel, text-only.

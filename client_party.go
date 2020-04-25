@@ -1,7 +1,7 @@
 package dota2
 
 import (
-	bgcm "github.com/13k/go-dota2/protocol"
+	bgcm "github.com/13k/go-steam-resources/protobuf/dota2"
 )
 
 // LeaveParty attempts to leave the current party.

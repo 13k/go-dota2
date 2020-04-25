@@ -1,8 +1,8 @@
 package dota2
 
 import (
-	gcccm "github.com/13k/go-dota2/protocol"
-	gcm "github.com/13k/go-dota2/protocol"
+	gcccm "github.com/13k/go-steam-resources/protobuf/dota2"
+	gcm "github.com/13k/go-steam-resources/protobuf/dota2"
 )
 
 // JoinLobbyTeam switches team in a lobby.
