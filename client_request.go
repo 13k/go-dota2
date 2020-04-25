@@ -4,14 +4,14 @@ import (
 	"context"
 	"sync"
 
-	"github.com/faceit/go-steam/protocol/gamecoordinator"
+	"github.com/13k/go-steam/protocol/gc"
 	"google.golang.org/protobuf/proto"
 
 	gcm "github.com/13k/go-dota2/protocol"
 )
 
 // responseHandler returns handled, and any error
-type responseHandler func(resp *gamecoordinator.GCPacket) bool
+type responseHandler func(resp *gc.Packet) bool
 
 // MakeRequest starts and tracks a request given a context.
 func (d *Dota2) MakeRequest(
@@ -57,7 +57,7 @@ func (d *Dota2) MakeRequest(
 		d.pendReq[respMsgID] = m
 	}
 
-	m[reqID] = func(resp *gamecoordinator.GCPacket) bool {
+	m[reqID] = func(resp *gc.Packet) bool {
 		respMtx.Lock()
 		defer respMtx.Unlock()
 
@@ -90,7 +90,7 @@ func (d *Dota2) MakeRequest(
 }
 
 // handleResponsePacket attempts to handle a response packet.
-func (d *Dota2) handleResponsePacket(packet *gamecoordinator.GCPacket) (handled bool) {
+func (d *Dota2) handleResponsePacket(packet *gc.Packet) (handled bool) {
 	d.pendReqMtx.Lock()
 	defer d.pendReqMtx.Unlock()
 

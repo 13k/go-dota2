@@ -1,7 +1,8 @@
 package dota2
 
 import (
-	"github.com/faceit/go-steam/protocol/gamecoordinator"
+	"github.com/13k/go-steam/protocol/gc"
+
 	gcsdkm "github.com/13k/go-dota2/protocol"
 	gcsm "github.com/13k/go-dota2/protocol"
 )
@@ -14,7 +15,7 @@ func (d *Dota2) RequestCacheSubscriptionRefresh(ownerSoid *gcsdkm.CMsgSOIDOwner)
 }
 
 // handleCacheSubscribed handles a CacheSubscribed packet.
-func (d *Dota2) handleCacheSubscribed(packet *gamecoordinator.GCPacket) error {
+func (d *Dota2) handleCacheSubscribed(packet *gc.Packet) error {
 	sub := &gcsdkm.CMsgSOCacheSubscribed{}
 	if err := d.unmarshalBody(packet, sub); err != nil {
 		return err
@@ -28,7 +29,7 @@ func (d *Dota2) handleCacheSubscribed(packet *gamecoordinator.GCPacket) error {
 }
 
 // handleCacheUnsubscribed handles a CacheUnsubscribed packet.
-func (d *Dota2) handleCacheUnsubscribed(packet *gamecoordinator.GCPacket) error {
+func (d *Dota2) handleCacheUnsubscribed(packet *gc.Packet) error {
 	sub := &gcsdkm.CMsgSOCacheUnsubscribed{}
 	if err := d.unmarshalBody(packet, sub); err != nil {
 		return err
@@ -42,7 +43,7 @@ func (d *Dota2) handleCacheUnsubscribed(packet *gamecoordinator.GCPacket) error 
 }
 
 // handleCacheUpdateMultiple handles when one or more object(s) in a cache is/are updated.
-func (d *Dota2) handleCacheUpdateMultiple(packet *gamecoordinator.GCPacket) error {
+func (d *Dota2) handleCacheUpdateMultiple(packet *gc.Packet) error {
 	sub := &gcsdkm.CMsgSOMultipleObjects{}
 	if err := d.unmarshalBody(packet, sub); err != nil {
 		return err
@@ -56,7 +57,7 @@ func (d *Dota2) handleCacheUpdateMultiple(packet *gamecoordinator.GCPacket) erro
 }
 
 // handleCacheDestroy handles when an object in a cache is destroyed.
-func (d *Dota2) handleCacheDestroy(packet *gamecoordinator.GCPacket) error {
+func (d *Dota2) handleCacheDestroy(packet *gc.Packet) error {
 	sub := &gcsdkm.CMsgSOSingleObject{}
 	if err := d.unmarshalBody(packet, sub); err != nil {
 		return err

@@ -3,7 +3,8 @@ package dota2
 import (
 	"context"
 
-	"github.com/faceit/go-steam/protocol/gamecoordinator"
+	"github.com/13k/go-steam/protocol/gc"
+
 	devents "github.com/13k/go-dota2/events"
 	gcsdkm "github.com/13k/go-dota2/protocol"
 	gcsm "github.com/13k/go-dota2/protocol"
@@ -56,7 +57,7 @@ func (d *Dota2) validateConnectionContext() (context.Context, error) {
 }
 
 // handleClientWelcome handles an incoming client welcome event.
-func (d *Dota2) handleClientWelcome(packet *gamecoordinator.GCPacket) error {
+func (d *Dota2) handleClientWelcome(packet *gc.Packet) error {
 	welcome := &gcsdkm.CMsgClientWelcome{}
 	if err := d.unmarshalBody(packet, welcome); err != nil {
 		return err
@@ -79,7 +80,7 @@ func (d *Dota2) handleClientWelcome(packet *gamecoordinator.GCPacket) error {
 }
 
 // handleConnectionStatus handles the connection status update event.
-func (d *Dota2) handleConnectionStatus(packet *gamecoordinator.GCPacket) error {
+func (d *Dota2) handleConnectionStatus(packet *gc.Packet) error {
 	stat := &gcsdkm.CMsgConnectionStatus{}
 	if err := d.unmarshalBody(packet, stat); err != nil {
 		return err

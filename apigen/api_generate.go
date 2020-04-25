@@ -8,9 +8,10 @@ import (
 	"strings"
 	"unicode"
 
-	gcm "github.com/13k/go-dota2/protocol"
 	"github.com/pkg/errors"
 	"github.com/serenize/snaker"
+
+	gcm "github.com/13k/go-dota2/protocol"
 )
 
 const (
@@ -39,7 +40,7 @@ func GenerateAPI(clientOutput, eventsOutput io.Writer) error {
 	clientImports := make(map[string]struct{})
 	clientImports["context"] = struct{}{}
 	clientImports["github.com/13k/go-dota2/protocol"] = struct{}{}
-	clientImports["github.com/faceit/go-steam/steamid"] = struct{}{}
+	clientImports["github.com/13k/go-steam/steamid"] = struct{}{}
 	clientImports["github.com/13k/go-dota2/events"] = struct{}{}
 
 	// responseMsgs are messages that are known to be responses.
@@ -166,8 +167,8 @@ func GenerateAPI(clientOutput, eventsOutput io.Writer) error {
 					reqFieldType = types.NewNamed(
 						types.NewTypeName(
 							0,
-							packageMap["github.com/faceit/go-steam/steamid"],
-							"SteamId",
+							packageMap["github.com/13k/go-steam/steamid"],
+							"SteamID",
 							reqFieldType,
 						),
 						reqFieldType,

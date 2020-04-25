@@ -5,9 +5,8 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/faceit/go-steam"
-	"github.com/faceit/go-steam/protocol/gamecoordinator"
-	protoV1 "github.com/golang/protobuf/proto" //nolint: staticcheck
+	"github.com/13k/go-steam"
+	"github.com/13k/go-steam/protocol/gc"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/protobuf/proto"
 
@@ -27,7 +26,7 @@ const AppID = 570
 var ErrNotReady = errors.New("the dota client is not ready to accept requests yet, or has just become unready")
 
 // handlerMap is the map of message types to handler functions.
-type handlerMap map[uint32]func(packet *gamecoordinator.GCPacket) error
+type handlerMap map[uint32]func(packet *gc.Packet) error
 
 // Dota2 handles the dota game handler.
 type Dota2 struct {
@@ -115,8 +114,7 @@ func (d *Dota2) buildHandlerMap() {
 
 // write sends a message to the game coordinator.
 func (d *Dota2) write(messageType uint32, msg proto.Message) {
-	msgV1 := protoV1.MessageV1(msg)
-	d.client.GC.Write(gamecoordinator.NewGCMsgProtobuf(AppID, messageType, msgV1))
+	d.client.GC.Write(gc.NewProtoMessage(AppID, messageType, msg))
 }
 
 // emit emits an event.
@@ -145,7 +143,7 @@ func (d *Dota2) accessState(cb func(nextState *state.Dota2State) (bool, error)) 
 }
 
 // unmarshalBody attempts to unmarshal a packet body.
-func (d *Dota2) unmarshalBody(packet *gamecoordinator.GCPacket, msg proto.Message) (parseErr error) {
+func (d *Dota2) unmarshalBody(packet *gc.Packet, msg proto.Message) (parseErr error) {
 	defer func() {
 		if parseErr != nil {
 			d.le.WithError(parseErr).WithField("msgtype", packet.MsgType).Warn("unable to parse message")
@@ -156,8 +154,8 @@ func (d *Dota2) unmarshalBody(packet *gamecoordinator.GCPacket, msg proto.Messag
 }
 
 // HandleGCPacket handles an incoming game coordinator packet.
-func (d *Dota2) HandleGCPacket(packet *gamecoordinator.GCPacket) {
-	if packet.AppId != AppID {
+func (d *Dota2) HandleGCPacket(packet *gc.Packet) {
+	if packet.AppID != AppID {
 		return
 	}
 
@@ -180,14 +178,14 @@ func (d *Dota2) HandleGCPacket(packet *gamecoordinator.GCPacket) {
 }
 
 // handlePingRequest handles an incoming ping request from the gc.
-func (d *Dota2) handlePingRequest(_ *gamecoordinator.GCPacket) error {
+func (d *Dota2) handlePingRequest(_ *gc.Packet) error {
 	d.write(uint32(gcsm.EGCBaseClientMsg_k_EMsgGCPingResponse), &gcsdkm.CMsgGCClientPing{})
 	return nil
 }
 
 // getEventEmitter returns a handler that emits an event, used by the generated code.
-func (d *Dota2) getEventEmitter(ctor func() devents.Event) func(packet *gamecoordinator.GCPacket) error {
-	return func(packet *gamecoordinator.GCPacket) error {
+func (d *Dota2) getEventEmitter(ctor func() devents.Event) func(packet *gc.Packet) error {
+	return func(packet *gc.Packet) error {
 		obj := ctor()
 		if err := d.unmarshalBody(packet, obj.GetEventBody()); err != nil {
 			return err

@@ -46,7 +46,7 @@ func (d *Dota2) LeaveCreateLobby(
 			}
 
 			le.Debug("attempting to leave lobby")
-			if destroyOldLobby && lob.GetLeaderId() == d.client.SteamId().ToUint64() {
+			if destroyOldLobby && lob.GetLeaderId() == d.client.SteamID().Uint64() {
 				resp, err := d.DestroyLobby(ctx)
 				if err != nil {
 					return err

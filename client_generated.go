@@ -4,9 +4,9 @@ package dota2
 
 import (
 	"context"
-	"github.com/faceit/go-steam/steamid"
 	"github.com/13k/go-dota2/events"
 	"github.com/13k/go-dota2/protocol"
+	"github.com/13k/go-steam/steamid"
 )
 
 // AbandonLobby abandons a lobby.
@@ -3763,7 +3763,7 @@ func (d *Dota2) RequestSocialMatchPostComment(
 // Response type: CMsgClientToGCRequestSteamDatagramTicketResponse
 func (d *Dota2) RequestSteamDatagramTicket(
 	ctx context.Context,
-	serverSteamID steamid.SteamId,
+	serverSteamID steamid.SteamID,
 ) (*protocol.CMsgClientToGCRequestSteamDatagramTicketResponse, error) {
 	serverSteamIDU64Val := uint64(serverSteamID)
 	serverSteamIDU64 := &serverSteamIDU64Val
@@ -4836,8 +4836,8 @@ func (d *Dota2) SendVerifyIntegrity(
 // Response type: CMsgWatchGameResponse
 func (d *Dota2) SendWatchGame(
 	ctx context.Context,
-	serverSteamid steamid.SteamId,
-	watchServerSteamid steamid.SteamId,
+	serverSteamid steamid.SteamID,
+	watchServerSteamid steamid.SteamID,
 	lobbyID uint64,
 	regions []uint32,
 ) (*protocol.CMsgWatchGameResponse, error) {
@@ -5054,7 +5054,7 @@ func (d *Dota2) SetPartyBuilderOptions(
 // Request ID: k_EMsgClientToGCSetPartyLeader
 // Request type: CMsgDOTASetGroupLeader
 func (d *Dota2) SetPartyLeader(
-	newLeaderSteamid steamid.SteamId,
+	newLeaderSteamid steamid.SteamID,
 ) {
 	newLeaderSteamidU64Val := uint64(newLeaderSteamid)
 	newLeaderSteamidU64 := &newLeaderSteamidU64Val
@@ -5136,7 +5136,7 @@ func (d *Dota2) SetSpectatorLobbyDetails(
 // Response type: CMsgSpectateFriendGameResponse
 func (d *Dota2) SpectateFriendGame(
 	ctx context.Context,
-	steamID steamid.SteamId,
+	steamID steamid.SteamID,
 	live bool,
 ) (*protocol.CMsgSpectateFriendGameResponse, error) {
 	steamIDU64Val := uint64(steamID)

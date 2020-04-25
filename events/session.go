@@ -1,7 +1,8 @@
 package events
 
 import (
-	sprotocol "github.com/faceit/go-steam/protocol/gamecoordinator"
+	"github.com/13k/go-steam/protocol/gc"
+
 	gcsdkm "github.com/13k/go-dota2/protocol"
 )
 
@@ -24,5 +25,5 @@ type ClientWelcomed struct {
 // UnhandledGCPacket is called when the client ignores an unhandled packet.
 type UnhandledGCPacket struct {
 	// Packet is the unhandled packet.
-	Packet *sprotocol.GCPacket
+	Packet *gc.Packet
 }
